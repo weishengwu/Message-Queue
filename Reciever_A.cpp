@@ -37,9 +37,44 @@ int main() {
 
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
+	bool cont = true;
+	string message;
+	string sender;
+	
+	while(cont)
+	{
+		msgrcv(qid, (struct msgbuf *)&msg, size, 117, 0); // read mesg
+		message = msg.greetings;
+		sender = message.substr(0,3);
+		message = message.substr(4);
+		
+		switch(sender)
+		{
+			case "997":
+				if(message.compare("Quit") ==0)
+				{
+					msg.mtype = 41;
+					strcpy(msg.greeting, "Message from Sender_997 Received");
+					cout<<"Message "<<message<<" from Sender_997 Received"<<endl;
+					msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+					cont = false;
+				}else
+				{
+					msg.mtype = 41;
+					strcpy(msg.greeting, "Message from Sender_997 Received");
+					cout<<"Message "<<message<<" from Sender_997 Received"<<endl;
+					msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+				}
+				break;
+			case "257":
+				cout<<"Message "<<message<<" from Sender_257 Received"<<endl;
+				break;
+		}
+		
+	}
 
-	msgrcv(qid, (struct msgbuf *)&msg, size, 117, 0); // read mesg
-						// don't read "fake" mesg
+	
+	/*					// don't read "fake" mesg
 	cout << getpid() << ": gets message" << endl;
 	cout << "message: " << msg.greeting << endl;
 	
@@ -52,7 +87,7 @@ int main() {
 	msgrcv (qid, (struct msgbuf *)&msg, size, -112, 0);
 	msgrcv (qid, (struct msgbuf *)&msg, size, 0, 0);
 	msgrcv (qid, (struct msgbuf *)&msg, size, 117, 0);
-
+	*/
 	// now safe to delete message queue
 	msgctl (qid, IPC_RMID, NULL);
 
