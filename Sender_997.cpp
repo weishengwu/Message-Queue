@@ -84,6 +84,7 @@ int main() {
 			msgrcv(qid, (struct msgbuf *)&msg, size, 42, 0); // read ack
 			cout<<msg.greeting<<endl;//print message
 		}
+		random = -1;
 	}
 	
 
