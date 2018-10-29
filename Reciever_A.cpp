@@ -37,27 +37,29 @@ int main() {
 
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
-	bool cont = true;
 	string message;
-	string sender;
+	int sender;
+	bool sender997 = true;
+	bool sender257 = true;
 	
-	while(cont)
+	
+	while(sender997 || sender257)
 	{
-		msgrcv(qid, (struct msgbuf *)&msg, size, 117, 0); // read mesg
-		message = msg.greetings;
-		sender = message.substr(0,3);
+		msgrcv(qid, (struct msgbuf *)&msg, size, 61, 0); // read mesg
+		message = msg.greeting;
+		sender = stoi(message.substr(0,3));
 		message = message.substr(4);
 		
 		switch(sender)
 		{
-			case "997":
+			case 997:
 				if(message.compare("Quit") ==0)
 				{
 					msg.mtype = 41;
-					strcpy(msg.greeting, "Message from Sender_997 Received");
-					cout<<"Message "<<message<<" from Sender_997 Received"<<endl;
+					strcpy(msg.greeting, "Sender_997 quit successful");
+					cout<<"Sender_997 quit successful"<<endl;
 					msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-					cont = false;
+					sender997 = false;
 				}else
 				{
 					msg.mtype = 41;
@@ -66,8 +68,12 @@ int main() {
 					msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 				}
 				break;
-			case "257":
-				cout<<"Message "<<message<<" from Sender_257 Received"<<endl;
+			case 251:
+				if(message.compare("Quit") ==0)
+				{
+					sender257 = false;
+				}
+				cout<<"Message "<<message<<" from Sender_251 Received"<<endl;
 				break;
 		}
 		

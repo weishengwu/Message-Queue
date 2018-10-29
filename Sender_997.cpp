@@ -18,6 +18,7 @@ Both child processes use message type mtype = 113 and 114.
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <cstring>
+#include <string>
 #include <iostream>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -51,40 +52,40 @@ int main() {
 			random = rand() % INT_MAX;
 		}
 		
-		if(random == 0)
+		if(random <= 100)
 		{
-			msg.mtype = 997;
+			
+			msg.mtype = 61;//send to receiver a
 			message = "997, Quit"; //to_string("Quit");
-			strcpy(msg.greeting, message);
+			strcpy(msg.greeting, message.c_str());
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 			
+			msgrcv(qid, (struct msgbuf *)&msg, size, 41, 0); // read ack
+			cout<<msg.greeting<<endl;//print message
+			
+			cont = false;
 			
 			
+		}else
+		{
+			msg.mtype = 61;//send to receiver a
+			message = "997, " + to_string(random);
+			strcpy(msg.greeting, message.c_str());
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			
+			msgrcv(qid, (struct msgbuf *)&msg, size, 41, 0); // read ack
+			cout<<msg.greeting<<endl;//print message
+			
+			msg.mtype = 62;//send to receiver b
+			message = "997, " + to_string(random);
+			strcpy(msg.greeting, message.c_str());
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			
+			msgrcv(qid, (struct msgbuf *)&msg, size, 42, 0); // read ack
+			cout<<msg.greeting<<endl;//print message
 		}
 	}
 	
-	// sending garbage
-	msg.mtype = 111;
-	strcpy(msg.greeting, "Fake message");
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-
-	strcpy(msg.greeting, "Another fake");
-	msg.mtype = 113;
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-
-	// prepare my message to send
-	strcpy(msg.greeting, "Hello there");	
-	cout << getpid() << ": sends greeting" << endl;
-	msg.mtype = 117; 	// set message type mtype = 117
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0); // sending
-
-	msgrcv(qid, (struct msgbuf *)&msg, size, 314, 0); // reading
-	cout << getpid() << ": gets reply" << endl;
-	cout << "reply: " << msg.greeting << endl;
-	cout << getpid() << ": now exits" << endl;
-
-	msg.mtype = 117;
-	msgsnd (qid, (struct msgbuf *)&msg, size, 0);
 
 	exit(0);
 }
