@@ -22,6 +22,7 @@ Both child processes use message type mtype = 113 and 114.
 #include <unistd.h>
 #include <sys/wait.h>
 #include <cstdlib>
+#include <bits/stdc++.h>
 using namespace std;
 
 int main() {
@@ -39,7 +40,29 @@ int main() {
 	};
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
-
+	bool cont = true;
+	int random = -1;
+	string message;
+	
+	while(cont)
+	{
+		while(random % 997 != 0)
+		{
+			random = rand() % INT_MAX;
+		}
+		
+		if(random == 0)
+		{
+			msg.mtype = 997;
+			message = "997, Quit"; //to_string("Quit");
+			strcpy(msg.greeting, message);
+			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
+			
+			
+			
+		}
+	}
+	
 	// sending garbage
 	msg.mtype = 111;
 	strcpy(msg.greeting, "Fake message");
