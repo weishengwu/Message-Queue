@@ -1,17 +1,12 @@
 /*
-
 This is a simple illustration of the use of:
 	ftok, msgget, msgsnd, msgrcv
-
 Program B creates a message queue to be shared with Program A.
 Then, they will pass messages back and forth.
-
 Program A sends the first message and reads the reply. Program A
 also sends a "fake" message to the msgQ that will never be read
 by Program B.
-
 Both child processes use message type mtype = 113 and 114.
-
 */
 
 #include <sys/types.h>
@@ -38,16 +33,19 @@ int main() {
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
 	string message;
+	string temp;
 	int sender;
 	bool sender997 = true;
-	bool sender257 = true;
+	bool sender251 = true;
 
 
-	while(sender997 || sender257)
+	while(sender997 || sender251)
 	{
 		msgrcv(qid, (struct msgbuf *)&msg, size, 61, 0); // read mesg
 		message = msg.greeting;
-		sender = stoi(message.substr(0,3));
+		temp = message.substr(0,3);
+		cout<<"temp = "<<temp<<endl;
+		sender = stoi(temp);
 		message = message.substr(4);
 
 		switch(sender)
@@ -71,30 +69,16 @@ int main() {
 			case 251:
 				if(message.compare("Quit") ==0)
 				{
-					sender257 = false;
+					sender251 = false;
 				}
 				cout<<"Message "<<message<<" from Sender_251 Received"<<endl;
 				break;
 		}
-		random = -1;
 
 	}
 
 
-	/*					// don't read "fake" mesg
-	cout << getpid() << ": gets message" << endl;
-	cout << "message: " << msg.greeting << endl;
 
-	strcat(msg.greeting, " and Adios.");
-	cout << getpid() << ": sends reply" << endl;
-	msg.mtype = 314; // only reading mesg with type mtype = 314
-	msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-	cout << getpid() << ": now exits" << endl;
-
-	msgrcv (qid, (struct msgbuf *)&msg, size, -112, 0);
-	msgrcv (qid, (struct msgbuf *)&msg, size, 0, 0);
-	msgrcv (qid, (struct msgbuf *)&msg, size, 117, 0);
-	*/
 	// now safe to delete message queue
 	msgctl (qid, IPC_RMID, NULL);
 
