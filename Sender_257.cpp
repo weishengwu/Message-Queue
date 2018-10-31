@@ -50,7 +50,7 @@ int main() {
 		{
 			cont = false;
 		}
-		
+		random = -1;
 		
 	}
 	

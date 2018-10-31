@@ -64,7 +64,7 @@ int main() {
 			//sends flag to 257
 			cout<<"Message "<<message<<" from Sender_257 Received"<<endl;
 			strcpy(msg.greeting, "Still Alive");
-			msg.mtype = 43
+			msg.mtype = 43;
 			msgsnd(qid, (struct msgbuf *)&msg, size, 0);
 			
 		}

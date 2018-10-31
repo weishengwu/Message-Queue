@@ -46,7 +46,7 @@ int main() {
 		strcpy(msg.greeting, message.c_str());
 		
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-		
+		random = -1;
 		
 	}
 	exit(0);

@@ -40,7 +40,7 @@ int main() {
 	buf msg;
 	int size = sizeof(msg)-sizeof(long);
 	bool cont = true;
-	bool receiverB = true;
+	bool receiverB = false;
 	int random = -1;
 	string message;
 	
