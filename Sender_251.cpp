@@ -1,4 +1,3 @@
-
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
@@ -12,11 +11,7 @@
 #include "get_info.h"
 using namespace std;
 
-void get_info(int, struct msgbuf *, int, long);
-
 int main() {
-
-
 
 	int qid = msgget(ftok(".",'u'), 0);
 
@@ -33,12 +28,11 @@ int main() {
 
 	get_info(qid, (struct msgbuf *)&msg, size, 61); //sends quit message to receiver_A after termination
 
-
 	int random = -1;
 	string message;
 	while(true)
 	{
-		while(random % 251 != 0)
+		while(random % 32600 != 0)
 		{
 			random = rand() % INT_MAX;
 		}
@@ -47,7 +41,7 @@ int main() {
 		strcpy(msg.greeting, message.c_str());
 
 		msgsnd(qid, (struct msgbuf *)&msg, size, 0);
-
+		random = -1;
 
 	}
 	exit(0);
